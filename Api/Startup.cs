@@ -1,15 +1,19 @@
 using Api.Authorization;
 using Api.Authorization.Permission;
+using Api.Middleware.Authenticate;
 using Api.Models;
 using Api.Services.Authenticate;
 using Api.Services.Categories;
 using Api.Services.Products;
 using Api.Services.StoreService;
+using Api.Services.Users;
 using Infastructure.Data;
 using Infastructure.Repositories;
 using Infastructure.Repositories.Catalogs.CategoryRepo;
+using Infastructure.Repositories.Catalogs.ProductCategoryRepo;
 using Infastructure.Repositories.ProductImageRepo;
 using Infastructure.Repositories.ProductRepo;
+using Infastructure.Repositories.UserRepo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -52,7 +56,7 @@ namespace myshop1
 
             services.AddDbContext<AppDbContext>(options =>
                 //options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
-               options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+               options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging()
             );
 
             services.AddControllers();
@@ -90,37 +94,40 @@ namespace myshop1
             #region Custome Authorization Handler in Middleware 
             //Authorize Handler
 
-            services.AddSingleton<IAuthorizationHandler, IsAccountNotDisabledHandler>();
-            services.AddSingleton<IAuthorizationHandler, IsEmployeeHandler>();
+            //services.AddSingleton<IAuthorizationHandler, IsAccountNotDisabledHandler>();
+            //services.AddSingleton<IAuthorizationHandler, IsEmployeeHandler>();
 
             //Authorize Policy base on Requirement
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("canManageProduct",
-                        policyBuilder => 
-                            policyBuilder.AddRequirements(
-                                    new IsAccountEnabledRequirement(),
-                                    new IsAllowedToEditProductRequirement()
-                                )
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("canManageProduct",
+            //            policyBuilder => 
+            //                policyBuilder.AddRequirements(
+            //                        new IsAccountEnabledRequirement(),
+            //                        new IsAllowedToEditProductRequirement()
+            //                    )
 
-                    );
-            });
+            //        );
+            //});
             #endregion Custome Authorization Handler in Middleware 
             #region Register Service
             /*Register Service, Repos DI here*/
 
             services.AddScoped<IAuthenticateService, AuthenticateService>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IStorageService, FileStorageService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductImageRepository, ProductImageRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 
             //Authorize Policy Provider
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-            services.AddSingleton<IAuthorizationHandler, PermisstionAuthorizeHandler>();
+            services.AddScoped<IAuthorizationHandler, PermissionAuthorizeHandler>();
 
+            services.AddScoped<IUserService, UserService>();
             //services.AddSingleton<IStudentRepository, TestStudentRepository1>();
             //services.AddSingleton<IStudentRepository, TestStudentRepository2>();
 
@@ -143,6 +150,8 @@ namespace myshop1
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion Register Service
+
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -171,7 +180,11 @@ namespace myshop1
                             .AllowCredentials()
                             );
 
+
             app.UseAuthentication();
+
+            //app.UseMiddleware<JwtMiddleware>();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

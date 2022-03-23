@@ -5,9 +5,11 @@ using Domain.Common.Paging;
 using Domain.Common.Wrappers;
 using Domain.Entities.Catalog;
 using Infastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,6 @@ namespace Api.Controllers.Catalog
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize("Permission.Product")]
     public class ProductsController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -40,9 +41,10 @@ namespace Api.Controllers.Catalog
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAll([FromQuery] ProductPagedRequestDto pagedRequestDto)
+        [AllowAnonymous]
+        public IActionResult GetAll([FromQuery] ProductPagedRequestDto pagedRequestDto)
         {
-            var listProduct = await _productService.GetAllProductPaging(pagedRequestDto);
+            var listProduct =  _productService.GetAllProductPaging(pagedRequestDto);
             //listProduct ?? Enumerable.Empty<ProductDto>()
             var metadata = new
             {
@@ -68,6 +70,7 @@ namespace Api.Controllers.Catalog
         }
 
         // GET api/<ProductsController>/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -88,8 +91,30 @@ namespace Api.Controllers.Catalog
             return Ok(_mapper.Map<ProductDto>(product));
         }
 
+        [Authorize("Permission.Product.Get")]
+        [HttpGet("admin/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAdminProduct(int id)
+        {
+            if (id < 0)
+            {
+                return BadRequest();
+            }
+
+            var product = await _productService.GetProductById(id);
+
+            if (product == null)
+            {
+                return BadRequest("Cannot found entity");
+            }
+
+            return Ok(_mapper.Map<ProductDto>(product));
+        }
+
         // POST api/<ProductsController>
         [HttpPost]
+        [Authorize("Permission.Product.Create")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post([FromForm] CreateProductDto createProductDto)
@@ -108,6 +133,7 @@ namespace Api.Controllers.Catalog
 
         // PUT api/<ProductsController>/5
         [HttpPut("{id}")]
+        [Authorize("Permission.Product.Update")]
         public async Task<IActionResult> Put(int id, [FromForm] UpdateProductDto productDto)
         {
             if (id < 0)
@@ -157,6 +183,42 @@ namespace Api.Controllers.Catalog
 
 
             return Ok();
+        }
+
+        [HttpGet("GetProductByCategory")]
+        public IActionResult GetProductByCategory([FromQuery] ProductPagedRequestDto requestDto, int categoryId)
+        {
+            try
+            {
+                var listProduct =  _productService.GetProductByCategoryId(requestDto, categoryId);
+
+                var metadata = new
+                {
+                    listProduct.TotalCount,
+                    listProduct.PageSize,
+                    listProduct.CurrentPage,
+                    listProduct.TotalPages,
+                    listProduct.HasNext,
+                    listProduct.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return Ok(new PagedReponse<List<ProductDto>>(listProduct)
+                {
+                    TotalRecord = listProduct.TotalCount,
+                    PageSize = listProduct.PageSize,
+                    TotalPages = listProduct.TotalPages,
+                    CurrentPage = listProduct.CurrentPage,
+                    HasNext = listProduct.HasNext,
+                    HasPrevious = listProduct.HasPrevious,
+                    PageNumber = requestDto.PageNumber
+
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ResponseResult<object>(e.Message));
+            }
         }
     }
 }

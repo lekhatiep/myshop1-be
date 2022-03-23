@@ -9,7 +9,7 @@ namespace Api.Services.Products
     {
         Task<List<ProductDto>> GetAllProduct();
 
-        Task<PagedList<ProductDto>> GetAllProductPaging(ProductPagedRequestDto pagedRequestDto);
+        PagedList<ProductDto> GetAllProductPaging(ProductPagedRequestDto pagedRequestDto);
 
         Task<ProductDto> GetProductById(int id);
 
@@ -20,5 +20,7 @@ namespace Api.Services.Products
         Task DeleteProduct(int id);
 
         Task UpdateDefaultImage(UpdateProductDto product);
+
+        PagedList<ProductDto> GetProductByCategoryId(ProductPagedRequestDto pagedRequestDto, int categoryId);
     }
 }

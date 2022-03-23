@@ -21,10 +21,10 @@ namespace Api.Contanst
         //Module Products
         public static class Products
         {
-            public const string View = "Permissions.Products.View";
-            public const string Create = "Permissions.Products.Create";
-            public const string Edit = "Permissions.Products.Edit";
-            public const string Delete = "Permissions.Products.Delete";
+            public const string View = "Permission.Products.View";
+            public const string Create = "Permission.Products.Create";
+            public const string Edit = "Permission.Products.Edit";
+            public const string Delete = "Permission.Products.Delete";
         }
     }
 }

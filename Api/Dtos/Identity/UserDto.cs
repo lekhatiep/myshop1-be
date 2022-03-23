@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
+using Domain.Base;
 using Domain.Entities.Identity;
 using System.Collections.Generic;
 
 namespace Api.Dtos.Identity
 {
     [AutoMap(typeof(User))]
-    public class UserDto
+    public class UserDto : IEntity<int>
     {
         private IList<UserRole> _userRoles;
+
+        public int Id { get ; set ; }
+
         public string UserName { get; set; }
 
         public string Password { get; set; }

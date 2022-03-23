@@ -99,7 +99,11 @@ namespace Api.Helper
             SecurityToken validatedToken;
 
             try { 
-                IPrincipal principal = tokenHandler.ValidateToken(accessToken, validationParameters, out validatedToken); } 
+                IPrincipal principal = tokenHandler.ValidateToken(accessToken, validationParameters, out validatedToken);
+
+               
+
+            } 
             catch (Exception)
             { 
                 return false;

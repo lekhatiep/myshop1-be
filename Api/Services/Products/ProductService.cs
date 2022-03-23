@@ -2,6 +2,7 @@
 using Api.Dtos.ProductImages;
 using Api.Dtos.Products;
 using Api.Extensions;
+using Api.Services.Categories;
 using Api.Services.StoreService;
 using AutoMapper;
 using Domain.Common.Paging;
@@ -25,16 +26,19 @@ namespace Api.Services.Products
         private readonly IProductImageRepository _productImageRepository;
         private readonly IMapper _mapper;
         private readonly IStorageService _storageService;
+        private readonly ICategoryService _categoryService;
         public ProductService(
             IProductRepository productRepository,
             IProductImageRepository productImageRepository,
             IMapper mapper,
-            IStorageService storageService)
+            IStorageService storageService,
+            ICategoryService categoryService)
         {
             _productRepository = productRepository;
             _productImageRepository = productImageRepository;
             _mapper = mapper;
             _storageService = storageService;
+            _categoryService = categoryService;
         }
 
         public async Task<int> CreateProduct(CreateProductDto productDto)
@@ -158,7 +162,7 @@ namespace Api.Services.Products
             return "/" + SystemConstant.ProductSettings.USET_CONTENT_FOLDER_NAME + "/" + fileName;
         }
 
-        public async Task<PagedList<ProductDto>> GetAllProductPaging(ProductPagedRequestDto  requestDto)
+        public PagedList<ProductDto> GetAllProductPaging(ProductPagedRequestDto  requestDto)
         {
             var queryProduct = _productRepository.List();
 
@@ -234,5 +238,58 @@ namespace Api.Services.Products
             await _productImageRepository.Save();
 
         }
+
+        public PagedList<ProductDto> GetProductByCategoryId(ProductPagedRequestDto requestDto, int categoryId)
+        {
+            var listProduct = _categoryService.GetAllProductByCategoryId(requestDto, categoryId);
+
+            #region SORTING
+            listProduct = Sorting(requestDto, listProduct);
+
+            #endregion SORTING
+            //Paging
+            var pageList = PagedList<Product>.ToPagedList(ref listProduct, requestDto.PageNumber, requestDto.PageSize);
+
+            var dataResult = _mapper.Map<PagedList<ProductDto>>(pageList);
+
+            return dataResult;
+        }
+
+
+        private static IQueryable<Product> Sorting(ProductPagedRequestDto requestDto, IQueryable<Product> listProduct)
+        {
+            #region SORTING
+            //Default sort by date created
+            listProduct = listProduct.OrderBy(x => x.CreateTime);
+
+            if (!string.IsNullOrEmpty(requestDto.SortBy))
+            {
+                switch (requestDto.SortBy)
+                {
+                    case "new_desc":
+                        listProduct = listProduct.OrderBy(x => x.CreateTime);
+                        break;
+
+                    case "popular_desc":
+                        listProduct = listProduct.OrderByDescending(x => x.ViewCount);
+                        break;
+
+                    case "price_desc":
+                        listProduct = listProduct.OrderByDescending(x => x.Price);
+                        break;
+                    case "price_asc":
+                        listProduct = listProduct.OrderBy(x => x.Price);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+
+            return listProduct;
+            #endregion SORTING
+        }
+
     }
 }

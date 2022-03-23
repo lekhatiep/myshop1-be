@@ -136,5 +136,22 @@ namespace Api.Controllers.Catalog
                 return BadRequest(new ResponseResult<object>(e.Message));
             }
         }
+
+    
+
+        //[HttpGet("AddRandomCategoryToProduct")]
+        //public async Task<IActionResult> AddRandomCategoryToProduct()
+        //{
+        //    try
+        //    {
+        //        await _categoryService.AddRandomCategoryToProduct();
+
+        //        return Ok();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(new ResponseResult<object>(e.Message));
+        //    }
+        //}
     }
 }
