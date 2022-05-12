@@ -10,6 +10,8 @@ namespace Domain.Entities.Catalog
         private ICollection<ProductCategory> _productCategories;
         private ICollection<ProductImage> _productImages;
         private ICollection<Promotion> _promotions;
+        private ICollection<CartItem> _cartItems;
+        private ICollection<OrderItem> _orderItems;
 
         public string Code { get; set; }
 
@@ -49,6 +51,18 @@ namespace Domain.Entities.Catalog
         {
             get => _promotions ??= new List<Promotion>();
             set => _promotions = value;
+        }
+        
+        public ICollection<CartItem> CartItems
+        {
+            get => _cartItems ??= new List<CartItem>();
+            set => _cartItems = value;
+        }
+
+        public ICollection<OrderItem> OrderItems
+        {
+            get => _orderItems ??= new List<OrderItem>();
+            set => _orderItems = value;
         }
     }
 }
