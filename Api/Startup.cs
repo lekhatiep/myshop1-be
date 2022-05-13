@@ -3,12 +3,15 @@ using Api.Authorization.Permission;
 using Api.Middleware.Authenticate;
 using Api.Models;
 using Api.Services.Authenticate;
+using Api.Services.Carts;
 using Api.Services.Categories;
 using Api.Services.Products;
 using Api.Services.StoreService;
 using Api.Services.Users;
 using Infastructure.Data;
 using Infastructure.Repositories;
+using Infastructure.Repositories.Catalogs.CartItemRepos;
+using Infastructure.Repositories.Catalogs.CartRepos;
 using Infastructure.Repositories.Catalogs.CategoryRepo;
 using Infastructure.Repositories.Catalogs.ProductCategoryRepo;
 using Infastructure.Repositories.ProductImageRepo;
@@ -122,6 +125,9 @@ namespace myshop1
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
 
             //Authorize Policy Provider
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();

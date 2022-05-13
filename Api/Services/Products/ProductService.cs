@@ -255,7 +255,6 @@ namespace Api.Services.Products
             return dataResult;
         }
 
-
         private static IQueryable<Product> Sorting(ProductPagedRequestDto requestDto, IQueryable<Product> listProduct)
         {
             #region SORTING

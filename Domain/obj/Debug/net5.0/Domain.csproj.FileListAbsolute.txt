@@ -13,3 +13,17 @@ C:\Users\tiep\source\repos\myshop1\Domain\obj\Debug\net5.0\Domain.dll
 C:\Users\tiep\source\repos\myshop1\Domain\obj\Debug\net5.0\ref\Domain.dll
 C:\Users\tiep\source\repos\myshop1\Domain\obj\Debug\net5.0\Domain.pdb
 C:\Users\tiep\source\repos\myshop1\Domain\obj\Debug\net5.0\Domain.genruntimeconfig.cache
+D:\Tiep\DOAN\myshop1-be\Domain\bin\Debug\net5.0\Domain.deps.json
+D:\Tiep\DOAN\myshop1-be\Domain\bin\Debug\net5.0\Domain.runtimeconfig.json
+D:\Tiep\DOAN\myshop1-be\Domain\bin\Debug\net5.0\Domain.runtimeconfig.dev.json
+D:\Tiep\DOAN\myshop1-be\Domain\bin\Debug\net5.0\Domain.dll
+D:\Tiep\DOAN\myshop1-be\Domain\bin\Debug\net5.0\ref\Domain.dll
+D:\Tiep\DOAN\myshop1-be\Domain\bin\Debug\net5.0\Domain.pdb
+D:\Tiep\DOAN\myshop1-be\Domain\obj\Debug\net5.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Tiep\DOAN\myshop1-be\Domain\obj\Debug\net5.0\Domain.AssemblyInfoInputs.cache
+D:\Tiep\DOAN\myshop1-be\Domain\obj\Debug\net5.0\Domain.AssemblyInfo.cs
+D:\Tiep\DOAN\myshop1-be\Domain\obj\Debug\net5.0\Domain.csproj.CoreCompileInputs.cache
+D:\Tiep\DOAN\myshop1-be\Domain\obj\Debug\net5.0\Domain.dll
+D:\Tiep\DOAN\myshop1-be\Domain\obj\Debug\net5.0\ref\Domain.dll
+D:\Tiep\DOAN\myshop1-be\Domain\obj\Debug\net5.0\Domain.pdb
+D:\Tiep\DOAN\myshop1-be\Domain\obj\Debug\net5.0\Domain.genruntimeconfig.cache

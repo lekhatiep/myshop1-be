@@ -8593,23 +8593,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\tiep\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\TiepLK\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tiep\\source\\repos\\myshop1\\Api\\Api.csproj",
+      "projectUniqueName": "D:\\Tiep\\DOAN\\myshop1-be\\Api\\Api.csproj",
       "projectName": "Api",
-      "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Api\\Api.csproj",
-      "packagesPath": "C:\\Users\\tiep\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Api\\obj\\",
+      "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Api\\Api.csproj",
+      "packagesPath": "C:\\Users\\TiepLK\\.nuget\\packages\\",
+      "outputPath": "D:\\Tiep\\DOAN\\myshop1-be\\Api\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\tiep\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\TiepLK\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8623,8 +8619,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj": {
-              "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj"
+            "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj": {
+              "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj"
             }
           }
         }
@@ -8688,6 +8684,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[5.0.15, 5.0.15]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -8696,7 +8698,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

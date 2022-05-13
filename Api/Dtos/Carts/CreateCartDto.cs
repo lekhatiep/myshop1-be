@@ -1,6 +1,6 @@
 ﻿namespace Api.Dtos.Carts
 {
-    public class CreateCartDto
+    public class CreateCartDto : BaseCartDto
     {
     }
 }

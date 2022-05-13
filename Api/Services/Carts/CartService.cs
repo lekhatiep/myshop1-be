@@ -1,66 +1,160 @@
-﻿using Api.Dtos.Categories;
+﻿using Api.Contanst.Catalogs;
+using Api.Dtos.CartItems;
+using Api.Dtos.Carts;
+using Api.Dtos.Categories;
 using Api.Dtos.Products;
-using Api.Services.Cart;
+using Api.Services.Users;
 using AutoMapper;
 using Domain.Common.Paging;
 using Domain.Entities.Catalog;
+using Infastructure.Repositories.Catalogs.CartItemRepos;
+using Infastructure.Repositories.Catalogs.CartRepos;
 using Infastructure.Repositories.Catalogs.CategoryRepo;
 using Infastructure.Repositories.Catalogs.ProductCategoryRepo;
 using Infastructure.Repositories.ProductRepo;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Api.Services.Carts
 {
     public class CartService : ICartService
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICartRepository _cartRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly ICartItemRepository _cartItemRepository;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public CartService(
             IMapper mapper,
             IProductRepository productRepository,
-            ICategoryRepository categoryRepository, 
-            IProductCategoryRepository productCategoryRepository)
+            IProductCategoryRepository productCategoryRepository,
+            ICartRepository cartRepository,
+            ICartItemRepository cartItemRepository,
+            IUserService userService)
         {
             _mapper = mapper;
-            _categoryRepository = categoryRepository;
-            _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
+            _cartRepository = cartRepository;
+            _cartItemRepository = cartItemRepository;
+            _userService = userService;
         }
  
 
-        public PagedList<CategoryDto> GetCategoryPaging(PagedCategoryRequestDto pagedCategoryRequest)
+        public async Task<List<CartItemDto>> AddToCart(CreateCartItemDto createCartItem)
         {
-            //Query
-            var queryCategory = _categoryRepository.List();
+            var cartId = await CheckUserExistCart(createCartItem.UserId);
 
-            //List category
+            if (cartId != -1)
+            {
+                var listCart = await GetUserListCartItem(cartId);
+                var itemExists = listCart.Where(x => x.ProductId == createCartItem.ProductId).FirstOrDefault();
+                if (itemExists != null)
+                {
+                    var carItemExists = await _cartItemRepository.List().Where(x => x.Id == itemExists.Id).FirstOrDefaultAsync();
 
-            var listCategory = queryCategory.Where(x => x.IsDelete == false);
-            var data = PagedList<Category>.ToPagedList(ref listCategory, pagedCategoryRequest.PageNumber, pagedCategoryRequest.PageSize);
+                    carItemExists.Quantity+= createCartItem.Quantity;
+                    await _cartItemRepository.Update(carItemExists, carItemExists.Id);
 
-            var dataResult = _mapper.Map<PagedList<CategoryDto>>(data);
+                }
+                else
+                {
+                    createCartItem.CartId = cartId;
 
-            return dataResult;
+                    await _cartItemRepository.Insert(_mapper.Map<CartItem>(createCartItem));
+                    await _cartItemRepository.Save();
+                }
+            }
+            else
+            {
+                var newCart = new Cart()
+                {
+                    UserId = createCartItem.UserId,
+                    Status = CatalogConst.CartStatus.PENDING,
+                };
+
+                await _cartRepository.Insert(newCart);
+                await _cartRepository.Save();
+
+                createCartItem.CartId = newCart.Id;
+                cartId = newCart.Id;
+
+                await _cartItemRepository.Insert(_mapper.Map<CartItem>(createCartItem));
+                await _cartItemRepository.Save();
+                
+            }
+
+            return await GetUserListCartItem(cartId);
         }
 
-        public IQueryable<Product> GetAllProductByCategoryId(ProductPagedRequestDto pagedRequestDto, int categoryId)
+        public async Task<int> CreateNewCart(CreateCartDto createCartDto)
         {
-            var queryProduct = from c in _categoryRepository.List()
-                     join cp in _productCategoryRepository.List() on c.Id equals cp.CategoryId into cpt
-                     from cp in cpt.DefaultIfEmpty()
-                     join p in _productRepository.List()
-                              .Include(x=>x.ProductImages.Where(x=>x.IsDefault == true && x.IsDelete == false)) on cp.ProductId equals p.Id
-                     where c.Id == categoryId &&
-                     c.IsDelete == false && p.IsDelete == false 
-                     select p                                                   
-                    ;
 
-            return queryProduct;
+            var cartId = await CheckUserExistCart(createCartDto.UserId);
+
+            if (cartId == -1)
+            {
+                return -1;
+            }
+
+            createCartDto.Status = CatalogConst.CartStatus.PENDING;
+
+            var newCart = _mapper.Map<Cart>(createCartDto);
+            await _cartRepository.Insert(newCart);
+            await _cartRepository.Save();
+
+            return newCart.Id;
+        }
+      
+
+        public async Task<int> CheckUserExistCart(int userId)
+        {
+            var cart = await _cartRepository.List().Where(x => x.UserId == userId && x.Status.Contains(CatalogConst.CartStatus.PENDING)).FirstOrDefaultAsync();
+
+            if (cart == null)
+            {
+                return -1;
+            }
+
+            return cart.Id;
+        }
+
+        public async Task<List<CartItemDto>> GetUserListCartItem(int cartId)
+        {
+
+            var queryCart = await (from c in _cartRepository.List()
+                             join ci in _cartItemRepository.List() on c.Id equals ci.CartId into cic
+                             from ci in cic.DefaultIfEmpty()
+                             join p in _productRepository.List()
+                                         .Include(x => x.ProductImages.Where(x => x.IsDefault == true && x.IsDelete)) on ci.ProductId equals p.Id
+                             where c.Id == cartId && c.Status.Contains(CatalogConst.CartStatus.PENDING) && c.IsDelete == false && p.IsDelete == false
+
+                             select new { ci, p }
+                             )
+
+                             .Select(x => new CartItemDto
+                             {
+                                 Id = x.ci.Id,
+                                 ProductId = x.p.Id,
+                                 ImgPath = x.p.ProductImages.FirstOrDefault().ImagePath,
+                                 Title = x.p.Title,
+                                 Price = x.ci.Price,
+                                 Quantity = x.ci.Quantity
+
+                             }).ToListAsync();
+                            ;
+
+            return queryCart;
+           
+        }
+
+        public async Task<Cart> GetCartUserById(int userId)
+        {
+            var user = await _cartRepository.List().Where(x => x.UserId == userId && x.Status.Contains(CatalogConst.CartStatus.PENDING) && x.IsDelete == false).FirstOrDefaultAsync();
+
+            return user;
         }
     }
 }
