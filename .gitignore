@@ -1,2 +1,7 @@
 #Images
 Api/wwwroot/user-content/
+
+#Debug
+Domain/obj/
+Api/obj/
+Infastructure/obj/
