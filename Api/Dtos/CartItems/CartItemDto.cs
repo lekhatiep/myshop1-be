@@ -10,5 +10,7 @@ namespace Api.Dtos.CartItems
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string ImgPath { get; set; }
+
+        public double Total { get; set ; }
     }
 }

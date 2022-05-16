@@ -54,10 +54,35 @@ namespace Api.Controllers.Catalog
             return Ok(listCart);
         }
 
-        // PUT api/<CartsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+      
+        [HttpPost("UpdateOrRemoveCartItem")]
+        public async Task<IActionResult> UpdateOrRemoveCartItem( [FromBody] List<UpdateCartItemDto> cartItemDtos)
         {
+            try
+            {
+                var listCartItem = await _cartService.UpdateOrRemoveCartItem(cartItemDtos);
+                return Ok(listCartItem);
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("UpdateItem")]
+        public async Task<IActionResult> UpdateItem([FromBody] UpdateCartItemDto cartItemDtos)
+        {
+            try
+            {
+                await _cartService.UpdateItem(cartItemDtos);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
         }
 
         // DELETE api/<CartsController>/5
