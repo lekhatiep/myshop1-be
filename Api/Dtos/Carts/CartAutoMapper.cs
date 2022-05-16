@@ -14,6 +14,7 @@ namespace Api.Dtos.Carts
         {
             CreateMap<CreateCartDto, Cart>();
             CreateMap<CreateCartItemDto, CartItem>();
+            CreateMap<UpdateCartItemDto, CartItem>();
         }
     }
 }

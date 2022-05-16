@@ -13,6 +13,7 @@ using Infastructure.Repositories.Catalogs.CategoryRepo;
 using Infastructure.Repositories.Catalogs.ProductCategoryRepo;
 using Infastructure.Repositories.ProductRepo;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -137,11 +138,13 @@ namespace Api.Services.Carts
                              .Select(x => new CartItemDto
                              {
                                  Id = x.ci.Id,
+                                 CartId = x.ci.CartId,
                                  ProductId = x.p.Id,
                                  ImgPath = x.p.ProductImages.FirstOrDefault().ImagePath,
                                  Title = x.p.Title,
                                  Price = x.ci.Price,
-                                 Quantity = x.ci.Quantity
+                                 Quantity = x.ci.Quantity,
+                                 Total = Convert.ToDouble(x.ci.Quantity * x.p.Price)
 
                              }).ToListAsync();
                             ;
@@ -152,9 +155,82 @@ namespace Api.Services.Carts
 
         public async Task<Cart> GetCartUserById(int userId)
         {
-            var user = await _cartRepository.List().Where(x => x.UserId == userId && x.Status.Contains(CatalogConst.CartStatus.PENDING) && x.IsDelete == false).FirstOrDefaultAsync();
+            var cart = await _cartRepository.List().Where(x => x.UserId == userId && x.Status.Contains(CatalogConst.CartStatus.PENDING) && x.IsDelete == false).FirstOrDefaultAsync();
 
-            return user;
+            return cart;
+        }
+
+        public async Task<List<CartItemDto>> UpdateOrRemoveCartItem(List<UpdateCartItemDto> updateCartItemDtos)
+        {
+            var cart = await GetCartUserById(1);
+            var listCartItems = await _cartItemRepository.List().Where(x => x.CartId == cart.Id).ToListAsync();
+
+            if (updateCartItemDtos.Any())
+            {
+                //Remove/Update cart item
+                foreach (var cartItem in listCartItems)
+                {
+                    if (updateCartItemDtos.Any(x => x.Id == cartItem.Id))
+                    {
+                        var existsItem = updateCartItemDtos.FirstOrDefault(x => x.Id == cartItem.Id);
+
+                        await _cartItemRepository.Update(_mapper.Map<CartItem>(existsItem), cartItem.Id);
+                    }
+                    else
+                    {
+                            
+                        await _cartItemRepository.Delete(cartItem.Id);
+                        await _cartItemRepository.Save();
+                    }
+                }
+
+                //Add new to cart item
+                //foreach (var cartItem in updateCartItemDtos)
+                //{
+                //    if (listCartItems.Any(x => x.Id == cartItem.Id))
+                //    {
+                //        var existsItem = updateCartItemDtos.FirstOrDefault(x => x.Id == cartItem.Id);
+
+                //        await _cartItemRepository.Update(_mapper.Map<CartItem>(existsItem), cartItem.Id);
+                //    }
+                //    else
+                //    {
+                //        updateCartItemDtos.Remove(cartItem);
+                //        await _cartItemRepository.Delete(cartItem.Id);
+                //    }
+                //}
+                
+            }
+            else
+            {
+                if (listCartItems.Any())
+                {
+                    foreach (var cartItem in listCartItems)
+                    {
+                        await _cartItemRepository.Delete(cartItem.Id);
+                        await _cartItemRepository.Save();
+                    }
+                }
+               
+            }
+
+
+            return await GetUserListCartItem(cart.Id);
+        }
+
+        public async Task<bool> UpdateItem(UpdateCartItemDto updateCartItemDto)
+        {
+            var cartItem = await _cartItemRepository.List().Where(x => x.Id == updateCartItemDto.Id).FirstOrDefaultAsync();
+            var product = await _productRepository.List().Where(x => x.Id == cartItem.ProductId).FirstOrDefaultAsync();
+
+            cartItem.Quantity = updateCartItemDto.Quantity;
+           
+          
+
+            await _cartItemRepository.Update(cartItem, updateCartItemDto.Id);
+
+            return true;
+
         }
     }
 }

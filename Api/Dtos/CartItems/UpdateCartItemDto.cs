@@ -1,9 +1,10 @@
 ﻿using Domain.Base;
+using System;
 
 namespace Api.Dtos.CartItems
 {
-    public class UpdateCartItemDto : BaseCartItemDto, IEntity<int>
+    public class UpdateCartItemDto : BaseCartItemDto, IEntity<Guid>
     {
-        public int Id { get ; set ; }
+        public Guid Id { get ; set ; }
     }
 }
