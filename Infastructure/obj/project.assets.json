@@ -1454,19 +1454,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\TiepLK\\.nuget\\packages\\": {}
+    "C:\\Users\\tiep\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj",
+      "projectUniqueName": "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj",
       "projectName": "Infastructure",
-      "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj",
-      "packagesPath": "C:\\Users\\TiepLK\\.nuget\\packages\\",
-      "outputPath": "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\obj\\",
+      "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj",
+      "packagesPath": "C:\\Users\\tiep\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\TiepLK\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\tiep\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1480,8 +1484,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\Tiep\\DOAN\\myshop1-be\\Domain\\Domain.csproj": {
-              "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Domain\\Domain.csproj"
+            "C:\\Users\\tiep\\source\\repos\\myshop1\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Domain\\Domain.csproj"
             }
           }
         }
@@ -1536,7 +1540,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
       }
     }
   }

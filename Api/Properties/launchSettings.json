@@ -19,7 +19,7 @@
     },
     "myshop1": {
       "commandName": "Project",
-      "workingDirectory": "D:\\Tiep\\DOAN\\myshop1-be\\Api",
+      "workingDirectory": "C:\\Users\\tiep\\source\\repos\\myshop1\\Api",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
