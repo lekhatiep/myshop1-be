@@ -1,14 +1,43 @@
-﻿using AutoMapper;
+﻿using Api.Dtos.OrderItems;
+using AutoMapper;
 using Domain.Entities.Catalog;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.Dtos.Orders
 {
-    [AutoMap(typeof(Order))]
+    [AutoMap(typeof(OrderDto))]
     public class BaseOrder
     {
+        private IList<OrderItemDto> _orderItems;
+
+        public int UserId { get; set; }
+
+        public string SessionId { get; set; }
+
+        public string Token { get; set; }
+
+        public string Status { get; set; }
+
+        public double SubTotal { get; set; }
+
+        public double ItemDisCount { get; set; }
+
+        public double Tax { get; set; }
+
+        public double Shipping { get; set; }
+
+        public double Total { get; set; }
+
+        public double Promo { get; set; }
+
+        public double Discount { get; set; }
+
+        public double GrandTotal { get; set; }
+
+        public IList<OrderItemDto> OrderItems
+        {
+            get => _orderItems ?? new List<OrderItemDto>();
+            set => _orderItems = value;
+        }
     }
 }

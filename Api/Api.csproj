@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\OrderItems\" />
     <Folder Include="wwwroot\user-content\" />
   </ItemGroup>
 

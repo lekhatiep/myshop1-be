@@ -144,8 +144,8 @@ namespace Api.Services.Carts
                                  Title = x.p.Title,
                                  Price = x.ci.Price,
                                  Quantity = x.ci.Quantity,
-                                 Total = Convert.ToDouble(x.ci.Quantity * x.p.Price)
-
+                                 Total = Convert.ToDouble(x.ci.Quantity * x.p.Price),
+                                 Active = x.ci.Active
                              }).ToListAsync();
                             ;
 
@@ -224,6 +224,7 @@ namespace Api.Services.Carts
             var product = await _productRepository.List().Where(x => x.Id == cartItem.ProductId).FirstOrDefaultAsync();
 
             cartItem.Quantity = updateCartItemDto.Quantity;
+            cartItem.Active = updateCartItemDto.Active;
            
           
 

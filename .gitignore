@@ -5,3 +5,12 @@ Api/wwwroot/user-content/
 Domain/obj/
 Api/obj/
 Infastructure/obj/
+Api/bin/Debug/net5.0/Domain.dll
+
+Api/bin/Debug/net5.0/
+
+Api/bin/
+
+Domain/
+
+Infastructure/

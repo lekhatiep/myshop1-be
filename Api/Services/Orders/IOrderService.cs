@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Api.Dtos.Orders;
+using Domain.Entities.Catalog;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Services.Orders
 {
     public interface IOrderService
     {
+        Task<int> Checkout(CreateOrderDto createOrderDto);
+        Task<List<OrderDto>> GetListHistoryOrderByUser(int userId);
     }
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Domain.Entities.Catalog
 {
-    public class Order : Entity<int>, IAudit
+    public class OrderDto : Entity<int>, IAudit
     {
         private ICollection<OrderItem> _orderItems;
 
