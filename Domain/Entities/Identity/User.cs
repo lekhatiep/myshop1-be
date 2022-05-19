@@ -8,7 +8,7 @@ namespace Domain.Entities.Identity
     {
         private ICollection<UserRole> _userRoles;
         private ICollection<Cart> _carts;
-        private ICollection<OrderDto> _orders;
+        private ICollection<Order> _orders;
 
         public string UserName { get; set; }
 
@@ -30,9 +30,9 @@ namespace Domain.Entities.Identity
             set => _carts = value;
         }
         
-        public ICollection<OrderDto> Orders
+        public ICollection<Order> Orders
         {
-            get => _orders ??= new List<OrderDto>();
+            get => _orders ??= new List<Order>();
             set => _orders = value;
         }
     }

@@ -23,9 +23,11 @@ namespace Api.Services.Carts
         Task<Cart> GetCartUserById(int userId);
 
 
-       Task<List<CartItemDto>> UpdateOrRemoveCartItem(List<UpdateCartItemDto>  updateCartItemDtos);
+        Task<List<CartItemDto>> UpdateOrRemoveCartItem(List<UpdateCartItemDto>  updateCartItemDtos);
 
-       Task<bool> UpdateItem(UpdateCartItemDto updateCartItemDto);
+        Task<bool> UpdateItem(UpdateCartItemDto updateCartItemDto);
+
+        Task<List<CartItemDto>> GetUserListCartItemChecked(int cartId);
 
     }
 }

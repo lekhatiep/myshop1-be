@@ -26,7 +26,7 @@ namespace Domain.Entities.Catalog
 
         public bool IsDelete { get ; set ; }
 
-        public virtual OrderDto Order { get; set; }
+        public virtual Order Order { get; set; }
 
         public virtual Product Product { get; set; }
     }

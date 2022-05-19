@@ -233,5 +233,34 @@ namespace Api.Services.Carts
             return true;
 
         }
+
+        public async Task<List<CartItemDto>> GetUserListCartItemChecked(int cartId)
+        {
+            var queryCart = await(from c in _cartRepository.List()
+                                  join ci in _cartItemRepository.List() on c.Id equals ci.CartId into cic
+                                  from ci in cic.DefaultIfEmpty()
+                                  join p in _productRepository.List()
+                                              .Include(x => x.ProductImages.Where(x => x.IsDefault == true && x.IsDelete)) on ci.ProductId equals p.Id
+                                  where c.Id == cartId && c.Status.Contains(CatalogConst.CartStatus.PENDING) && c.IsDelete == false && p.IsDelete == false
+                                  && ci.Active == true
+
+                                  select new { ci, p }
+                             )
+
+                             .Select(x => new CartItemDto
+                             {
+                                 Id = x.ci.Id,
+                                 CartId = x.ci.CartId,
+                                 ProductId = x.p.Id,
+                                 ImgPath = x.p.ProductImages.FirstOrDefault().ImagePath,
+                                 Title = x.p.Title,
+                                 Price = x.ci.Price,
+                                 Quantity = x.ci.Quantity,
+                                 Total = Convert.ToDouble(x.ci.Quantity * x.p.Price),
+                                 Active = x.ci.Active
+                             }).ToListAsync();
+
+            return queryCart;
+        }
     }
 }

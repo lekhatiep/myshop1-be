@@ -8,6 +8,7 @@ namespace Api.Services.Orders
     public interface IOrderService
     {
         Task<int> Checkout(CreateOrderDto createOrderDto);
-        Task<List<OrderDto>> GetListHistoryOrderByUser(int userId);
+        Task<List<Order>> GetListHistoryOrderByUser(int userId);
+        Task<int> ProcessCheckoutOrder(int userId);
     }
 }

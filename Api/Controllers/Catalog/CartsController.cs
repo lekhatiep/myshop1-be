@@ -26,9 +26,16 @@ namespace Api.Controllers.Catalog
         public async Task<IActionResult> GetListCart()
         {
             var cart = await _cartService.GetCartUserById(1); //Admin
-            var listCart = await _cartService.GetUserListCartItem(cart.Id);
+            if (cart == null)
+            {
+                return NotFound();
+            }
 
+            var listCart = await _cartService.GetUserListCartItem(cart.Id);
             return Ok(listCart);
+            
+
+
         }
 
         // GET api/<CartsController>/5
@@ -89,6 +96,20 @@ namespace Api.Controllers.Catalog
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        // GET: api/<CartsController>
+        [HttpGet("GetListCartItemChecked")]
+        public async Task<IActionResult> GetListCartItemChecked()
+        {
+            var cart = await _cartService.GetCartUserById(1); //Admin
+            if (cart == null)
+            {
+                return NotFound();
+            }
+            var listCart = await _cartService.GetUserListCartItemChecked(cart.Id);
+
+            return Ok(listCart);
         }
     }
 }

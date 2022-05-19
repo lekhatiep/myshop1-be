@@ -36,21 +36,23 @@ namespace Api.Controllers.Catalog
 
         // POST api/<OrdersController>
         [HttpPost("Checkout")]
-        public async Task<IActionResult> Checkout([FromBody] CreateOrderDto createOrderDto)
+        public async Task<IActionResult> Checkout([FromBody] CreateOrderDto create)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var order = await _orderService.Checkout(createOrderDto);
-
-            if (order < 0)
+            try
             {
-                return BadRequest(order);
+                await _orderService.ProcessCheckoutOrder(create.UserId);
+                return Ok();
             }
+            catch (Exception e)
+            {
 
-            return Ok(order);
+                return BadRequest(e.Message);
+            }
         }
 
         // PUT api/<OrdersController>/5

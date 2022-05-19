@@ -2,7 +2,7 @@
 
 namespace Infastructure.Repositories.Catalogs.OrderRepos
 {
-    public interface IOrderRepository : IGenericRepository<OrderDto>
+    public interface IOrderRepository : IGenericRepository<Order>
     {
     }
 }

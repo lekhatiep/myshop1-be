@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Api.Dtos.Orders
 {
-    [AutoMap(typeof(OrderDto))]
+    [AutoMap(typeof(Order))]
     public class BaseOrder
     {
         private IList<OrderItemDto> _orderItems;
