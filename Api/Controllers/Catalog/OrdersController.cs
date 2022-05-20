@@ -21,10 +21,19 @@ namespace Api.Controllers.Catalog
             _orderService = orderService;
         }
         // GET: api/<OrdersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("HistoryOrderByUser")]
+        public async Task<IActionResult> HistoryOrderByUser(string status)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                var listOrderItem = await _orderService.GetListHistoryOrderByUser(1, status);//admin
+                return Ok(listOrderItem);
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
         }
 
         // GET api/<OrdersController>/5

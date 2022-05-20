@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tiep\\source\\repos\\myshop1\\Api\\Api.csproj": {}
+    "D:\\Tiep\\DOAN\\myshop1-be\\Api\\Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tiep\\source\\repos\\myshop1\\Api\\Api.csproj": {
+    "D:\\Tiep\\DOAN\\myshop1-be\\Api\\Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tiep\\source\\repos\\myshop1\\Api\\Api.csproj",
+        "projectUniqueName": "D:\\Tiep\\DOAN\\myshop1-be\\Api\\Api.csproj",
         "projectName": "Api",
-        "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Api\\Api.csproj",
-        "packagesPath": "C:\\Users\\tiep\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Api\\obj\\",
+        "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Api\\Api.csproj",
+        "packagesPath": "C:\\Users\\TiepLK\\.nuget\\packages\\",
+        "outputPath": "D:\\Tiep\\DOAN\\myshop1-be\\Api\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\tiep\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TiepLK\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -31,8 +28,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj": {
-                "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj"
+              "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj": {
+                "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj"
               }
             }
           }
@@ -96,6 +93,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[5.0.15, 5.0.15]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -104,24 +107,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\tiep\\source\\repos\\myshop1\\Domain\\Domain.csproj": {
+    "D:\\Tiep\\DOAN\\myshop1-be\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tiep\\source\\repos\\myshop1\\Domain\\Domain.csproj",
+        "projectUniqueName": "D:\\Tiep\\DOAN\\myshop1-be\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\tiep\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Domain\\obj\\",
+        "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\TiepLK\\.nuget\\packages\\",
+        "outputPath": "D:\\Tiep\\DOAN\\myshop1-be\\Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\tiep\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TiepLK\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -177,24 +177,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj": {
+    "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj",
+        "projectUniqueName": "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj",
         "projectName": "Infastructure",
-        "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\Infastructure.csproj",
-        "packagesPath": "C:\\Users\\tiep\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Infastructure\\obj\\",
+        "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\Infastructure.csproj",
+        "packagesPath": "C:\\Users\\TiepLK\\.nuget\\packages\\",
+        "outputPath": "D:\\Tiep\\DOAN\\myshop1-be\\Infastructure\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\tiep\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TiepLK\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -208,8 +205,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\tiep\\source\\repos\\myshop1\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\tiep\\source\\repos\\myshop1\\Domain\\Domain.csproj"
+              "D:\\Tiep\\DOAN\\myshop1-be\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\Tiep\\DOAN\\myshop1-be\\Domain\\Domain.csproj"
               }
             }
           }
@@ -264,7 +261,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

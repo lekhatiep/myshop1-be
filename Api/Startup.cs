@@ -14,6 +14,7 @@ using Infastructure.Repositories;
 using Infastructure.Repositories.Catalogs.CartItemRepos;
 using Infastructure.Repositories.Catalogs.CartRepos;
 using Infastructure.Repositories.Catalogs.CategoryRepo;
+using Infastructure.Repositories.Catalogs.OrderItemRepos;
 using Infastructure.Repositories.Catalogs.OrderRepos;
 using Infastructure.Repositories.Catalogs.ProductCategoryRepo;
 using Infastructure.Repositories.ProductImageRepo;
@@ -132,6 +133,7 @@ namespace myshop1
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 
             //Authorize Policy Provider
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();

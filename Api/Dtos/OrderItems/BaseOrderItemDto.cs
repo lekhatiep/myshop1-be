@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities.Catalog;
+using System;
 
 namespace Api.Dtos.OrderItems
 {
@@ -13,6 +14,8 @@ namespace Api.Dtos.OrderItems
         public double Discount { get; set; }
 
         public double Quantity { get; set; }
+
+        public DateTime CreateTime { get; set; }
 
     }
 }
