@@ -1,5 +1,8 @@
-﻿using Api.Dtos.Orders;
+﻿using Api.Dtos.OrderItems;
+using Api.Dtos.Orders;
 using Api.Services.Orders;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,19 +18,23 @@ namespace Api.Controllers.Catalog
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IOrderService orderService, IHttpContextAccessor httpContextAccessor)
         {
             _orderService = orderService;
+            _httpContextAccessor = httpContextAccessor;
         }
         // GET: api/<OrdersController>
+        [Authorize(Contanst.NamePermissions.Orders.View)]
         [HttpGet("HistoryOrderByUser")]
         public async Task<IActionResult> HistoryOrderByUser(string status)
         {
             try
             {
-                var listOrderItem = await _orderService.GetListHistoryOrderByUser(1, status);//admin
-                return Ok(listOrderItem);
+                var userId = (int)_httpContextAccessor.HttpContext.Items["Id"];
+                var listOrderItem = await _orderService.GetListHistoryOrderByUser(userId, status);//admin
+                return Ok(listOrderItem?? new List<OrderItemDto>());
             }
             catch (Exception e)
             {
@@ -44,6 +51,7 @@ namespace Api.Controllers.Catalog
         }
 
         // POST api/<OrdersController>
+        [Authorize(Contanst.NamePermissions.Orders.Create)]
         [HttpPost("Checkout")]
         public async Task<IActionResult> Checkout([FromBody] CreateOrderDto create)
         {

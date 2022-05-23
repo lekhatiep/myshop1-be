@@ -1,5 +1,6 @@
 using Api.Authorization;
 using Api.Authorization.Permission;
+using Api.Middleware;
 using Api.Middleware.Authenticate;
 using Api.Models;
 using Api.Services.Authenticate;
@@ -195,7 +196,7 @@ namespace myshop1
 
             app.UseAuthentication();
 
-            //app.UseMiddleware<JwtMiddleware>();
+            //app.UseMiddleware<UserLoginSessionHandlerMiddleware>();
             
             app.UseAuthorization();
 

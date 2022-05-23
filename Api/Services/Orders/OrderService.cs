@@ -118,7 +118,9 @@ namespace Api.Services.Orders
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
                     Discount = item.Discount, //Discount supplier
-                    CreateTime = DateTime.Now
+                    CreateTime = DateTime.Now,
+                    Price = item.Price,
+                    Total = subTotal
                 });
             }
 

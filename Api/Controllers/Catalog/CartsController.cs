@@ -1,5 +1,7 @@
 ﻿using Api.Dtos.CartItems;
 using Api.Services.Carts;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,24 +17,28 @@ namespace Api.Controllers.Catalog
     public class CartsController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CartsController(ICartService cartService)
+        public CartsController(ICartService cartService, IHttpContextAccessor httpContextAccessor)
         {
             _cartService = cartService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: api/<CartsController>
+        [Authorize(Contanst.NamePermissions.Carts.View)]
         [HttpGet("GetListCart")]
         public async Task<IActionResult> GetListCart()
         {
-            var cart = await _cartService.GetCartUserById(1); //Admin
+            var userId = (int)_httpContextAccessor.HttpContext.Items["Id"];
+            var cart = await _cartService.GetCartUserById(userId); //Admin
             if (cart == null)
             {
-                return NotFound();
+                return Ok(new List<CartItemDto>());
             }
 
             var listCart = await _cartService.GetUserListCartItem(cart.Id);
-            return Ok(listCart);
+            return Ok(listCart?? new List<CartItemDto>());
             
 
 
@@ -46,6 +52,7 @@ namespace Api.Controllers.Catalog
         }
 
         // POST api/<CartsController>
+        [Authorize(Contanst.NamePermissions.Carts.Create)]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateCartItemDto createCartItemDto)
         {
@@ -54,14 +61,15 @@ namespace Api.Controllers.Catalog
                 return BadRequest(ModelState.Values);
             }
 
+            var userId = (int)_httpContextAccessor.HttpContext.Items["Id"];
             await _cartService.AddToCart(createCartItemDto);
-            var cart = await _cartService.GetCartUserById(1); //Admin
+            var cart = await _cartService.GetCartUserById(userId); //Admin
             var listCart = await _cartService.GetUserListCartItem(cart.Id);
 
             return Ok(listCart);
         }
 
-      
+        [Authorize(Contanst.NamePermissions.Carts.Edit)]
         [HttpPost("UpdateOrRemoveCartItem")]
         public async Task<IActionResult> UpdateOrRemoveCartItem( [FromBody] List<UpdateCartItemDto> cartItemDtos)
         {
@@ -77,6 +85,7 @@ namespace Api.Controllers.Catalog
             }
         }
 
+        [Authorize(Contanst.NamePermissions.Carts.Edit)]
         [HttpPost("UpdateItem")]
         public async Task<IActionResult> UpdateItem([FromBody] UpdateCartItemDto cartItemDtos)
         {
@@ -98,11 +107,13 @@ namespace Api.Controllers.Catalog
         {
         }
 
+        [Authorize(Contanst.NamePermissions.Carts.View)]
         // GET: api/<CartsController>
         [HttpGet("GetListCartItemChecked")]
         public async Task<IActionResult> GetListCartItemChecked()
         {
-            var cart = await _cartService.GetCartUserById(1); //Admin
+            var userId = (int)_httpContextAccessor.HttpContext.Items["Id"];
+            var cart = await _cartService.GetCartUserById(userId); //Admin
             if (cart == null)
             {
                 return NotFound();
