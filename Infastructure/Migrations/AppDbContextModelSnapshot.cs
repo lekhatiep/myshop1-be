@@ -69,6 +69,12 @@ namespace Infastructure.Migrations
                     b.Property<double>("Discount")
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("IsChecked")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsOrder")
+                        .HasColumnType("boolean");
+
                     b.Property<double>("Price")
                         .HasColumnType("double precision");
 

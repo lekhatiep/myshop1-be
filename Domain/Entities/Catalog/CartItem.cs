@@ -18,6 +18,10 @@ namespace Domain.Entities.Catalog
 
         public bool Active { get; set; }
 
+        public bool IsChecked { get; set; }
+
+        public bool IsOrder { get; set; }
+
         public virtual Product Product { get; set; }
 
         public virtual Cart Cart { get; set; }
