@@ -22,5 +22,9 @@ namespace Api.Services.Products
         Task UpdateDefaultImage(UpdateProductDto product);
 
         PagedList<ProductDto> GetProductByCategoryId(ProductPagedRequestDto pagedRequestDto, int categoryId);
+
+        PagedList<ProductDto> GetProductByName(ProductPagedRequestDto pagedRequestDto);
+
+        Task UpdateSEOTitle(UpdateProductDto updateProductDto);
     }
 }

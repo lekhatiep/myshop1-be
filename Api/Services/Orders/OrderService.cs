@@ -41,6 +41,7 @@ namespace Api.Services.Orders
             _productRepository = productRepository;
         }
 
+      
         public async Task<int> Checkout(CreateOrderDto createOrderDto)
         {
             var orderItems = new List<OrderItemDto>();
@@ -67,16 +68,39 @@ namespace Api.Services.Orders
 
         public async Task<List<OrderItemDto>> GetListHistoryOrderByUser(int userId, string status)
         {
-            var queryOrderItem = await (from o in _orderRepository.List()
-                                   join oi in _orderItemRepository.List() on o.Id equals oi.OrderId into oio
-                                   from oi in oio.DefaultIfEmpty()
-                                   join p in _productRepository.List()
-                                               .Include(x => x.ProductImages.Where(x => x.IsDefault == true && x.IsDelete)) on oi.ProductId equals p.Id
-                                   where o.UserId == userId && o.Status.ToLower().Contains(status.ToLower().Trim()) && o.IsDelete == false && o.IsDelete == false
-                                   
+            var query = from o in _orderRepository.List()
+                        join oi in _orderItemRepository.List() on o.Id equals oi.OrderId into oio
+                        from oi in oio.DefaultIfEmpty()
+                        join p in _productRepository.List()
+                                    .Include(x => x.ProductImages.Where(x => x.IsDefault == true && x.IsDelete)) on oi.ProductId equals p.Id 
+                        select new { o, oi, p };
 
-                                   select new { oi, p }
-                             )
+            if (status.ToLower().Contains("ALL"))
+            {
+                status = string.Empty;
+
+                var queryAllOrderItem = await (from q in query
+                               where q.o.UserId == userId && q.o.IsDelete == false 
+
+                               select new { q.oi, q.p })
+                               .Select(x => new OrderItemDto
+                               {
+                                   Id = x.oi.Id,
+                                   ProductId = x.p.Id,
+                                   ImgPath = x.p.ProductImages.FirstOrDefault().ImagePath,
+                                   Title = x.p.Title,
+                                   Price = x.oi.Price,
+                                   Quantity = x.oi.Quantity,
+                                   Total = x.oi.Quantity * Convert.ToDouble(x.p.Price),
+
+                               }).ToListAsync(); ;
+
+                return queryAllOrderItem;
+            }
+
+            var queryOrderItem = await (from q in query where q.o.UserId == userId &&
+                                   q.o.Status.ToLower().Contains(status.ToLower().Trim()) && q.o.IsDelete == false
+                                   select new { q.oi, q.p })
 
                              .Select(x => new OrderItemDto
                              {
@@ -96,7 +120,7 @@ namespace Api.Services.Orders
         public async Task<int> ProcessCheckoutOrder(int userId)
         {
             var cart = await _cartService.GetCartUserById(userId);
-            var listCart = await _cartService.GetUserListCartItem(cart.Id);
+            var listCart = await _cartService.GetUserListCartItemIsOrder(cart.Id);
 
             var orderItems = new List<OrderItemDto>();
             var createOrderDto = new CreateOrderDto();
@@ -136,11 +160,36 @@ namespace Api.Services.Orders
             await _orderRepository.Insert(order);
             await _orderRepository.Save();
 
-            //Update cart
+
+
+            //Update current product quantity
+
+            foreach (var item in listCart)
+            {
+                var product = await _productRepository.GetById(item.ProductId);
+                product.Quantity--;
+
+                await _productRepository.Update(product, product.Id);
+
+            }
+
+            //Update Cart 
+
             cart.Status = CatalogConst.CartStatus.SUCCESS;
             await _cartRepository.Update(cart, cart.Id);
 
             return order.Id;
         }
+
+        public async Task<int> CancelOrder(int orderId)
+        {
+            var order = await _productRepository.GetById(orderId);
+            order.IsDelete = true;
+
+            await _productRepository.Update(order, order.Id);
+
+            return 1;
+        }
+
     }
 }

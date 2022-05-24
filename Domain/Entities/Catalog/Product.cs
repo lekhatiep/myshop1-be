@@ -35,6 +35,10 @@ namespace Domain.Entities.Catalog
 
         public bool IsDelete { get; set; }
 
+        public string SeoTitle { get; set; }
+
+        public string SeoDescription { get; set; }
+
         public ICollection<ProductCategory> ProductCategories
         {
             get => _productCategories ??= new List<ProductCategory>();

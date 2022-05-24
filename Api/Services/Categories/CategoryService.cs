@@ -1,13 +1,10 @@
 ﻿using Api.Dtos.Categories;
-using Api.Dtos.ProductImages;
 using Api.Dtos.Products;
 using AutoMapper;
 using Domain.Common.Paging;
 using Domain.Entities.Catalog;
-using Infastructure.Repositories;
 using Infastructure.Repositories.Catalogs.CategoryRepo;
 using Infastructure.Repositories.Catalogs.ProductCategoryRepo;
-using Infastructure.Repositories.ProductImageRepo;
 using Infastructure.Repositories.ProductRepo;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -44,7 +41,9 @@ namespace Api.Services.Categories
 
             //List category
 
-            var listCategory = queryCategory.Where(x => x.IsDelete == false);
+            var listCategory = queryCategory
+                .Where(x => x.ProductCategories.Any(p => p.CategoryId == x.Id))
+                .Where(x => x.IsDelete == false);
             var data = PagedList<Category>.ToPagedList(ref listCategory, pagedCategoryRequest.PageNumber, pagedCategoryRequest.PageSize);
 
             var dataResult = _mapper.Map<PagedList<CategoryDto>>(data);

@@ -17,5 +17,9 @@ namespace Api.Dtos.CartItems
         public int Quantity { get; set; }
 
         public bool Active { get; set; }
+
+        public bool IsChecked { get; set; }
+
+        public bool IsOrder { get; set; }
     }
 }

@@ -20,7 +20,8 @@ namespace Api.Dtos.Products
             CreateMap<ProductDto,UpdateProductDto>();
 
             CreateMap<PagedList<Product>, PagedList<ProductDto>>()
-                .ConvertUsing<PagedListTypeConverter<Product, ProductDto>>();
+                .ConvertUsing<ProductPagedListTypeConverter<Product, ProductDto>>();
+
            
         }
     }

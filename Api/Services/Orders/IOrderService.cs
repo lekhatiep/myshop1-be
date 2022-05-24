@@ -11,5 +11,6 @@ namespace Api.Services.Orders
         Task<int> Checkout(CreateOrderDto createOrderDto);
         Task<List<OrderItemDto>> GetListHistoryOrderByUser(int userId, string status);
         Task<int> ProcessCheckoutOrder(int userId);
+        Task<int> CancelOrder(int orderId);
     }
 }

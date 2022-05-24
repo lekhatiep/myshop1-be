@@ -29,5 +29,7 @@ namespace Api.Services.Carts
 
         Task<List<CartItemDto>> GetUserListCartItemChecked(int cartId);
 
+        Task<List<CartItemDto>> GetUserListCartItemIsOrder(int cartId);
+
     }
 }

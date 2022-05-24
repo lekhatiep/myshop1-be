@@ -220,5 +220,47 @@ namespace Api.Controllers.Catalog
                 return BadRequest(new ResponseResult<object>(e.Message));
             }
         }
+
+        [HttpGet("GetProductByName")]
+        public IActionResult GetProductByName([FromQuery] ProductPagedRequestDto requestDto)
+        {
+            try
+            {
+                var listProduct = _productService.GetProductByName(requestDto);
+
+     
+
+                return Ok(new PagedReponse<List<ProductDto>>(listProduct)
+                {
+                    TotalRecord = listProduct.TotalCount,
+                    PageSize = listProduct.PageSize,
+                    TotalPages = listProduct.TotalPages,
+                    CurrentPage = listProduct.CurrentPage,
+                    HasNext = listProduct.HasNext,
+                    HasPrevious = listProduct.HasPrevious,
+                    PageNumber = requestDto.PageNumber
+
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ResponseResult<object>(e.Message));
+            }
+        }
+
+        [HttpGet("updateSEO")]
+        public async Task<IActionResult> updateSEO()
+        {
+            var products = await _productService.GetAllProduct();
+
+            foreach (var item in products)
+            {
+                var productUpdateDto = _mapper.Map<UpdateProductDto>(item);
+                await _productService.UpdateSEOTitle(productUpdateDto);
+            }
+
+
+            return Ok();
+        }
     }
 }

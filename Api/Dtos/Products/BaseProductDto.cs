@@ -28,6 +28,8 @@ namespace Api.Dtos.Products
 
         public IFormFile ThumbnailImage { get; set; }
 
+        public ProductCategory  ProductCategory { get; set; }
+
         public IList<ProductImageDto> ProductImages
         {
             get => _productImages ??= new List<ProductImageDto>();
