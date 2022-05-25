@@ -1,5 +1,7 @@
-﻿using Domain.Entities.Identity;
+﻿using Api.Dtos.Identity;
+using Domain.Entities.Identity;
 using Infastructure.Data;
+using Infastructure.Repositories.UserRepo;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,11 +13,14 @@ namespace Api.Services.Users
     public class UserService : IUserService
     {
         private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(AppDbContext context)
+        public UserService(AppDbContext context, IUserRepository userRepository)
         {
             _context = context;
+            _userRepository = userRepository;
         }
+
         public async Task<List<string>> GetAllPermissionByUserId(int id)
         {
             var userQuery = _context.Users;
@@ -52,6 +57,24 @@ namespace Api.Services.Users
             var user = _context.Users.Where(x => x.Id == id).FirstOrDefault();
 
             return user;
+        }
+
+
+        public async Task<bool> IsExistsUser(CreateUserDto createUserDto)
+        {
+            createUserDto.Password = createUserDto.Password ?? string.Empty;
+            createUserDto.UserName = createUserDto.UserName ?? string.Empty;
+            createUserDto.Phone = createUserDto.UserName ?? string.Empty;
+
+            var user = await _userRepository.List()
+                .Where(x => x.Email.ToLower() == createUserDto.Email.ToLower().Trim()).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

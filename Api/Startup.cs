@@ -8,6 +8,7 @@ using Api.Services.Carts;
 using Api.Services.Categories;
 using Api.Services.Orders;
 using Api.Services.Products;
+using Api.Services.Roles;
 using Api.Services.StoreService;
 using Api.Services.Users;
 using Infastructure.Data;
@@ -20,7 +21,9 @@ using Infastructure.Repositories.Catalogs.OrderRepos;
 using Infastructure.Repositories.Catalogs.ProductCategoryRepo;
 using Infastructure.Repositories.ProductImageRepo;
 using Infastructure.Repositories.ProductRepo;
+using Infastructure.Repositories.RoleRepo;
 using Infastructure.Repositories.UserRepo;
+using Infastructure.Repositories.UserRoleRepo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -135,6 +138,10 @@ namespace myshop1
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
 
             //Authorize Policy Provider
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();

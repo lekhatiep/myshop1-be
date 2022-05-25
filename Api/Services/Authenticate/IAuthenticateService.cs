@@ -7,6 +7,6 @@ namespace Api.Services.Authenticate
     public interface IAuthenticateService
     {
         Task<AuthReponseDto> Authenticate(LoginDto loginDto);
-        Task Register(CreateUserDto loginDto);
+        Task<int> Register(CreateUserDto loginDto);
     }
 }

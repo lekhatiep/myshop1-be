@@ -2,6 +2,8 @@
 using Api.Dtos.TokenDto;
 using Api.Extensions;
 using Api.Helper;
+using Api.Services.Roles;
+using Api.Services.Users;
 using AutoMapper;
 using Domain.Entities.Identity;
 using Infastructure.Data;
@@ -24,28 +26,24 @@ namespace Api.Services.Authenticate
 
 
         private readonly IUserRepository _userRepository;
-        //private readonly IGenericRepository<Role> _roleRepository;
-        //private readonly IGenericRepository<RolePermission> _rolePermissionRepository;
-        //private readonly IGenericRepository<Domain.Entities.Identity.Permission> _permissionRepository;
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
 
         public AuthenticateService(
             IUserRepository userRepository,
-            //IGenericRepository<Role> roleRepository,
-            //IGenericRepository<RolePermission> rolePermissionRepository,
-            //IGenericRepository<Domain.Entities.Identity.Permission> permissionRepository,
             AppDbContext context,
-             IMapper mapper
+             IMapper mapper,
+             IUserService userService,
+             IRoleService roleService
             )
         {
-            //_userRepository = userRepository;
-            //_roleRepository = roleRepository;
-            //_rolePermissionRepository = rolePermissionRepository;
-            //_permissionRepository = permissionRepository;
             _userRepository = userRepository;
             _context = context;
             _mapper = mapper;
+            _userService = userService;
+            _roleService = roleService;
         }
         public async Task<AuthReponseDto> Authenticate(LoginDto login)
         {
@@ -110,38 +108,9 @@ namespace Api.Services.Authenticate
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
             claims.Add(new Claim("id",user.Id.ToString()));
 
-            // var permisions = "Permission.Product.View Permission.Home.View";
             var permisions = string.Empty;
 
-            //claims.Add(new Claim("Permission", permisions));
             var listPermissionName = new List<string>();
-
-            //foreach (var role in roles)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role.Name));
-
-            //    var rolePermission = await queryRolePermission.Where(x=>x.RoleId == role.Id).ToListAsync();
-
-            //    //  .Where(x => x.RoleId == role.Id).ToList();
-            //    if (rolePermission != null)
-            //    {
-
-            //        foreach (var permission in rolePermission)
-            //        {
-            //            var pers = await queryPermission
-            //                .Where(x => x.Id == permission.PermissionId).SingleOrDefaultAsync();
-
-            //            if (!listPermissionName.Any(x => x.Contains(pers.Name)))
-            //            {
-            //                listPermissionName.Add(pers.Name);
-            //                permisions += pers.Name + " ";
-            //            }
-
-            //        }                  
-            //    }
-            //}
-
-            //claims.Add(new Claim("Permission", permisions.Trim()));
 
             var secToken = new JwtSecurityToken(
                 AppSettings.ISSUER,
@@ -162,12 +131,23 @@ namespace Api.Services.Authenticate
             };
         }
 
-        public async Task Register(CreateUserDto loginDto)
+        public async Task<int> Register(CreateUserDto loginDto)
         {
+            var existsUser = await _userService.IsExistsUser(loginDto);
+
+            if (existsUser)
+            {
+                return -1;
+            }
+
             var newUser = _mapper.Map<User>(loginDto);
 
             await _userRepository.Insert(newUser);
-            await _context.SaveChangesAsync();
+            await _userRepository.Save();
+
+            //await _roleService.AssignRoleDefault("member", newUser.Id);
+
+            return newUser.Id;
         }
     }
 }

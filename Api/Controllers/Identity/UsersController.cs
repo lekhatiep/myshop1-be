@@ -50,8 +50,16 @@ namespace Api.Controllers.Identity
 
             try
             {
-                await _authenticateService.Register(user);
-                return Ok();
+                var rs = await _authenticateService.Register(user);
+                if (rs != -1)
+                {
+                    return Ok();
+
+                }
+                else
+                {
+                   return BadRequest();
+                }
             }
             catch (Exception e)
             {
@@ -136,6 +144,33 @@ namespace Api.Controllers.Identity
                 var permissions = await _userService.GetAllPermissionByUserId(userId);
                 
                 return Ok(permissions);
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(new ResponseResult<string>(e.Message));
+            }
+
+        }
+
+        [Route("CheckEmailExists")]
+        [HttpGet]
+        public async Task<IActionResult> CheckEmailExists(string email)
+        {
+
+            try
+            {
+                var tempCreateUserDto = new CreateUserDto() {
+                    Email = email,
+                    Password = string.Empty,
+                    Phone = string.Empty,
+                    UserName = string.Empty
+
+                };
+                var rs = await _userService.IsExistsUser(tempCreateUserDto);
+
+                return Ok(rs);
+                
             }
             catch (Exception e)
             {
