@@ -12,6 +12,7 @@ using Infastructure.Repositories.Catalogs.CartRepos;
 using Infastructure.Repositories.Catalogs.CategoryRepo;
 using Infastructure.Repositories.Catalogs.ProductCategoryRepo;
 using Infastructure.Repositories.ProductRepo;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace Api.Services.Carts
         private readonly IProductRepository _productRepository;
         private readonly ICartItemRepository _cartItemRepository;
         private readonly IUserService _userService;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IMapper _mapper;
 
         public CartService(
@@ -34,13 +36,15 @@ namespace Api.Services.Carts
             IProductCategoryRepository productCategoryRepository,
             ICartRepository cartRepository,
             ICartItemRepository cartItemRepository,
-            IUserService userService)
+            IUserService userService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _productRepository = productRepository;
             _cartRepository = cartRepository;
             _cartItemRepository = cartItemRepository;
             _userService = userService;
+            this.httpContextAccessor = httpContextAccessor;
         }
  
 
@@ -162,7 +166,8 @@ namespace Api.Services.Carts
 
         public async Task<List<CartItemDto>> UpdateOrRemoveCartItem(List<UpdateCartItemDto> updateCartItemDtos)
         {
-            var cart = await GetCartUserById(1);
+            var userId = (int)httpContextAccessor.HttpContext.Items["Id"];
+            var cart = await GetCartUserById(userId);
             var listCartItems = await _cartItemRepository.List().Where(x => x.CartId == cart.Id).ToListAsync();
 
             if (updateCartItemDtos.Any())

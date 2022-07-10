@@ -142,10 +142,14 @@ namespace Api.Services.Authenticate
 
             var newUser = _mapper.Map<User>(loginDto);
 
+           // var userName = newUser.Email.Substring(newUser.Email.IndexOf('@'), newUser.Email.Length);
+            newUser.UserName = newUser.Email;
+
             await _userRepository.Insert(newUser);
             await _userRepository.Save();
 
-            //await _roleService.AssignRoleDefault("member", newUser.Id);
+            await _roleService.AssignRoleDefault("member", newUser.Id);
+
 
             return newUser.Id;
         }
